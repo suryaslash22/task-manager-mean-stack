@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TaskService } from 'src/app/task.service';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-task-view',
@@ -13,7 +14,7 @@ ngOnInit() {
 }
 
 createNewList(){
-  this.taskService.createList{'testing'}.subscribe((response:any) => {
+  this.taskService.createList('testing').subscribe((response: any) =>{
     console.log(response);
-  })
+  });
 }}

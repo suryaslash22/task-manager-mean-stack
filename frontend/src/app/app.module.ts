@@ -15,8 +15,8 @@ import { TaskViewComponent } from './pages/task-view/task-view.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
-    HttpClientModule
+    AppRoutingModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
