@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 
 const { List, Task } = require('./db/models');
 const { request } = require('express');
-const { rulesToMonitor } = require('nodemon/lib/monitor/match');
+
 
 //Load middleware
 app.use(bodyParser.json());
