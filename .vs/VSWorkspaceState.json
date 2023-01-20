@@ -3,7 +3,15 @@
     "",
     "\\api",
     "\\api\\db",
-    "\\api\\db\\models"
+    "\\api\\db\\models",
+    "\\frontend",
+    "\\frontend\\.angular",
+    "\\frontend\\.angular\\cache",
+    "\\frontend\\src",
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\pages",
+    "\\frontend\\src\\app\\pages\\task-view"
   ],
+  "SelectedNode": "\\api\\db\\mongoose.js",
   "PreviewInSolutionExplorer": false
 }

@@ -14,7 +14,7 @@ ngOnInit() {
 }
 
 createNewList(){
-  this.taskService.createList('testing').subscribe((response: any) =>{
+  this.taskService.createList('testing').subscribe((response: any) => {
     console.log(response);
   });
 }}
