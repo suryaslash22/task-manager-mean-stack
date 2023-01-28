@@ -7,26 +7,25 @@
       </h1>
    
       <div class="list-menu">
-
-         <a class="list-menu-item" *ngFor="let list of lists" [routerLink]="['/lists', list._id]" routerLinkActive="is-active">
+       
+          <a class="list-menu-item" *ngFor="let list of lists" [routerLink]="['/lists',list._id]" routerLinkActive="is-active">
           <p>{{ list.title }}</p>
-         </a>
+        </a>
 
       </div>
 
-            <button class="button is-primary has-text-white" routerLink="/new-list"> + New List </button>
+       <button class="button is-primary has-text-white" routerLink="/new-list">+ New List</button>
 
   </div>
 
   <div class="task-list-container   has-background-light">
   <h1 class="title has-text-primary">
         Tasks
-  </h1>
-
-  <!-- Task Elements -->
-  <div class="task" *ngFor="let task of tasks">
-    <p> {{ task.title }} </p>
+      </h1>
+      <!-- Task Elements -->
+        <div class="task" *ngFor="let task of tasks">
+                    <p>{{ task.title }}</p>
+          </div>
   </div>
-
 
  </div>
