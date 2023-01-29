@@ -34,13 +34,9 @@ app.use(function (req, res, next) {
 app.get('/lists', (req, res) => {
 // We want to return an array of all the lists in the database
 	
-    List.find({
-        _userId: req.user_id
-    }).then((lists) => {
+    List.find({}).then((lists) => {
         res.send(lists);
-    }).catch((e) => {
-        res.send(e);
-    });
+       });
 })
 
 /**
@@ -55,8 +51,7 @@ app.post('/lists', (req, res) => {
 
     let newList = new List({
         title,
-        _userId: req.user_id
-    });
+          });
     newList.save().then((listDoc) => {
         // the full list document is returned (incl. id)
         res.send(listDoc);
@@ -69,7 +64,7 @@ app.post('/lists', (req, res) => {
  */
 app.patch('/lists/:id', (req, res) => {
     // We want to update the specified list (list document with id in the URL) with the new values specified in the JSON body of the request
-   List.findOneAndUpdate({ _id: req.params.id, _userId: req.user_id }, {
+   List.findOneAndUpdate({ _id: req.params.id }, {
         $set: req.body
     }).then(() => {
         res.send({ 'message': 'updated successfully'});
@@ -85,13 +80,10 @@ app.delete('/lists/:id', (req, res) => {
     // We want to delete the specified list (document with id in the URL)
     List.findOneAndRemove({
         _id: req.params.id,
-        _userId: req.user_id
-    }).then((removedListDoc) => {
+           }).then((removedListDoc) => {
         res.send(removedListDoc);
 
-        // delete all the tasks that are in the deleted list
-        deleteTasksFromList(removedListDoc._id);
-    })
+           })
 });
 
 /**
@@ -106,7 +98,14 @@ app.get('/lists/:listId/tasks',  (req, res) => {
         res.send(tasks);
     })
 });
-
+app.get('/lists/:listId/tasks',  (req, res) => {
+Task.findOne({
+    _id: req.params.taskId,
+    _listId:  req.params.listId
+}).then((task) => {
+  res.send(task);
+})
+});
 
 /**
  * POST /lists/:listId/tasks
@@ -115,31 +114,13 @@ app.get('/lists/:listId/tasks',  (req, res) => {
 app.post('/lists/:listId/tasks',  (req, res) => {
     // We want to create a new task in a list specified by listId
 
-    List.findOne({
-        _id: req.params.listId,
-        _userId: req.user_id
-    }).then((list) => {
-        if (list) {
-            // list object with the specified conditions was found
-            // therefore the currently authenticated user can create new tasks
-            return true;
-        }
-
-        // else - the list object is undefined
-        return false;
-    }).then((canCreateTask) => {
-        if (canCreateTask) {
-            let newTask = new Task({
+                let newTask = new Task({
                 title: req.body.title,
                 _listId: req.params.listId
             });
             newTask.save().then((newTaskDoc) => {
                 res.send(newTaskDoc);
             })
-        } else {
-            res.sendStatus(404);
-        }
-    })
 })
 
 /**
@@ -149,22 +130,7 @@ app.post('/lists/:listId/tasks',  (req, res) => {
 app.patch('/lists/:listId/tasks/:taskId', (req, res) => {
     // We want to update an existing task (specified by taskId)
 
-    List.findOne({
-        _id: req.params.listId,
-        _userId: req.user_id
-    }).then((list) => {
-        if (list) {
-            // list object with the specified conditions was found
-            // therefore the currently authenticated user can make updates to tasks within this list
-            return true;
-        }
-
-        // else - the list object is undefined
-        return false;
-    }).then((canUpdateTasks) => {
-        if (canUpdateTasks) {
-            // the currently authenticated user can update tasks
-            Task.findOneAndUpdate({
+                Task.findOneAndUpdate({
                 _id: req.params.taskId,
                 _listId: req.params.listId
             }, {
@@ -173,11 +139,8 @@ app.patch('/lists/:listId/tasks/:taskId', (req, res) => {
             ).then(() => {
                 res.send({ message: 'Updated successfully.' })
             })
-        } else {
-            res.sendStatus(404);
-        }
-    })
-});
+          });
+
 
 /**
  * DELETE /lists/:listId/tasks/:taskId
@@ -185,32 +148,14 @@ app.patch('/lists/:listId/tasks/:taskId', (req, res) => {
  */
 app.delete('/lists/:listId/tasks/:taskId', (req, res) => {
 
-    List.findOne({
-        _id: req.params.listId,
-        _userId: req.user_id
-    }).then((list) => {
-        if (list) {
-            // list object with the specified conditions was found
-            // therefore the currently authenticated user can make updates to tasks within this list
-            return true;
-        }
-
-        // else - the list object is undefined
-        return false;
-    }).then((canDeleteTasks) => {
-        
-        if (canDeleteTasks) {
-            Task.findOneAndRemove({
+               Task.findOneAndRemove({
                 _id: req.params.taskId,
                 _listId: req.params.listId
             }).then((removedTaskDoc) => {
                 res.send(removedTaskDoc);
             })
-        } else {
-            res.sendStatus(404);
-        }
+        
     });
-});
 
 
 
