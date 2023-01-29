@@ -22,8 +22,9 @@ ngOnInit() {
     this.route.params.subscribe(
       (params: Params) => {
       console.log(params);
-         this.taskService.getTasks (params['listId']).subscribe((tasks: any) => {
-         this.tasks= tasks;
+         this.taskService.getTasks(params['listId']).subscribe((tasks: any) => {
+          console.log(tasks);
+         this.tasks = tasks;
                     })
                 }
       )
