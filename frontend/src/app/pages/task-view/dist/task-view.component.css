@@ -15,6 +15,30 @@ html, body {
   height: 100%;
 }
 
+.modal-box {
+  min-height: 200px;
+  width: 100%;
+  max-width: 580px;
+  background: white;
+  border-radius: 5px;
+  padding: 35px;
+}
+
+.title {
+  font-family: 'Lato';
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.white-box {
+  padding: 35px;
+  background: white;
+  border-radius: 5px;
+  width: 350px;
+  max-width: 350px;
+}
+
 .task-manager-container {
   display: flex;
   width: 100%;
@@ -27,13 +51,14 @@ html, body {
   display: flex;
   flex-direction: column;
   width: 250px;
-  background-color: white;
+  background: white;
   padding: 42px;
-  border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 .task-list-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -42,11 +67,14 @@ html, body {
   border-bottom-right-radius: 8px;
 }
 
-.title {
-  font-family: 'Lato';
-  font-size: 24px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+.task-list-container .top-bar {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.task-list-container .top-bar .title {
+  flex-grow: 1;
+  margin: 0;
 }
 
 .list-menu {
@@ -72,14 +100,16 @@ html, body {
 
 .list-menu .list-menu-item.is-active {
   background-color: #cff8ef;
-  color: #006464;
+  color: #006450;
 }
 
 .task {
+  display: flex;
   background: white;
   padding: 15px 20px;
   border-radius: 5px;
   margin-top: 10px;
+  align-items: center;
 }
 
 .task:not(.complete) {
@@ -95,9 +125,49 @@ html, body {
   box-shadow: 0 0 0 5px #eeeeee;
 }
 
-.task.complete {
+.task:not(.complete):hover .task-buttons {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.task.completed .task-text {
   text-decoration: line-through;
   opacity: 0.8;
+}
+
+.task .task-text {
+  display: flex;
+  flex-grow: 1;
+}
+
+.task .task-buttons {
+  transition: opacity 0.2s, transform 0.2s;
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.circle-add-button {
+  position: absolute;
+  bottom: 35px;
+  right: 35px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.empty-state-text {
+  font-size: 20px;
+  color: #777;
+  text-align: center;
+}
+
+.circle-add-button {
+  position: absolute;
+  bottom: 35px;
+  right: 35px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
 }
 
 /*# sourceMappingURL=task-view.component.css.map */
