@@ -98,6 +98,11 @@
         }
     }
 
+    &.completed {
+        text-decoration: line-through;
+        opacity: 0.8;
+    }
+
     &.completed .task-text {
         text-decoration: line-through;
         opacity: 0.8;
