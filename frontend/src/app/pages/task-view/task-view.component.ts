@@ -20,12 +20,17 @@ constructor(private taskService: TaskService, private route: ActivatedRoute, pri
 ngOnInit() {
     this.route.params.subscribe(
       (params: Params) => {
+        if (params['listId']){
       console.log(params);
          this.taskService.getTasks(params['listId']).subscribe((tasks: any) => {
           console.log(tasks);
          this.tasks = tasks;
                     })
                 }
+                else{
+                  this.tasks = undefined;
+                }
+              }
       )
     this.taskService.getLists().subscribe((lists: any) => {
       this.lists = lists;
