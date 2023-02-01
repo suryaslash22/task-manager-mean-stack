@@ -1,7 +1,8 @@
-<p>signup-page works!</p>
 <div class="centered-content">
     <div class="white-box">
-      <h1 class="title has-text-primary">Signup</h1>
+  
+      <h1 class="title has-text-primary">Sign Up</h1>
+      
       <div class="field">
         <p class="control has-icons-left has-icons-right">
           <input #emailInput class="input has-background-light" type="email" placeholder="Email">
@@ -20,12 +21,13 @@
       </div>
       <div class="field" style="display: flex; justify-content: flex-end;">
         <p class="control">
-          <!----------------------------------------
-            <button class="button is-success has-text-white" (click) = "onSignupButtonClicked(emailInput.value, pwInput.value)" >
-            Signup
+          <button class="button is-success has-text-white" (click)="onSignupButtonClicked(emailInput.value, pwInput.value)" >
+            Sign Up
           </button>
-    ------------------------------------------------->
         </p>
       </div>
+  
       <br>
+  
+      
     </div>
