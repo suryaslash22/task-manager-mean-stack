@@ -16,6 +16,7 @@ export class LoginPageComponent implements OnInit {
 
   onLoginButtonClicked(email: string, password: string) {
     this.authService.login(email, password).subscribe((res: HttpResponse<any>) => {
+      
       console.log(res);
     })
   }
