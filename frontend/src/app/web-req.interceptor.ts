@@ -3,8 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse } from '@a
 import { Observable, throwError, empty, Subject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { catchError, tap, switchMap } from 'rxjs/operators';
-
-
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +24,8 @@ export class WebReqInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         console.log(error);
+        const login_url = "http://localhost:3000/users/login";
+        const users_url = "http://localhost:3000/users";
 
         if (error.status === 401){
           // 401 so we are unauthorized
@@ -43,6 +44,35 @@ export class WebReqInterceptor implements HttpInterceptor {
             })
           )
         }
+
+        else if (error.url === login_url){
+            Swal.fire({
+              title: 'Error',
+              text: 'Please check your credentials',
+              icon: 'error',
+              backdrop: false
+          })
+        }
+
+        else if (error.url === users_url && error.status === 400){
+          if (error.error.code && error.error.code === 11000){
+            Swal.fire({
+              title: 'Error',
+              html: 'Email already registered. Please log in.',
+              icon: 'error',
+              backdrop: false
+          })
+          }
+          else{
+            Swal.fire({
+              title: 'Error',
+              html: '1. Email must be at least 1 character long. <br>2. Password must be at least 8 characters long.',
+              icon: 'error',
+              backdrop: false
+          })
+        }
+        }
+
         return throwError(error);
       })
     )
