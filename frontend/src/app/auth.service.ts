@@ -53,7 +53,7 @@ export class AuthService {
   }
 
   setAccessToken(accessToken: string){
-    localStorage.setItem('x-access-item', accessToken);
+    localStorage.setItem('x-access-token', accessToken);
   }
 
   private setSession(userId : string, accessToken: string, refreshToken: string){
