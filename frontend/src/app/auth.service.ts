@@ -37,7 +37,6 @@ export class AuthService {
 
   logout(){
     this.removeSession();
-
     this.router.navigate(['/login']);
   }
 
@@ -64,9 +63,9 @@ export class AuthService {
   }
 
   private removeSession(){
-    localStorage.removeItem('userId');
-    localStorage.removeItem('x-accessToken');
-    localStorage.removeItem('x-refreshToken');
+    localStorage.removeItem('user-id');
+    localStorage.removeItem('x-access-token');
+    localStorage.removeItem('x-refresh-token');
   }
 
   getNewAccessToken() {
