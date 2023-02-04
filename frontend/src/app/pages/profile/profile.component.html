@@ -5,38 +5,34 @@
       <br>
       <div class="field">
         <p class="control has-icons-left has-icons-right">
-          <input #emailInput class="input has-background-light" type="password" placeholder="Old password">
+          <input #oldPwInput class="input has-background-light" type="password" placeholder="Old password">
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-key"></i>
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
-          <input #pwInput class="input has-background-light" type="password" placeholder="New password">
+          <input #newPwInput class="input has-background-light" type="password" placeholder="New password">
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-key"></i>
           </span>
         </p>
       </div>
       <div class="field">
         <p class="control has-icons-left">
-          <input #pwInput class="input has-background-light" type="password" placeholder="Confirm new password">
+          <input #confirmNewPwInput class="input has-background-light" type="password" placeholder="Confirm new password">
           <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-key"></i>
           </span>
         </p>
       </div>
       <br>
-      <div class="field" style="display: flex; justify-content: flex-end;">
-        <p class="control">
-          <button class="button is-success has-text-white">
-            Change Password
-          </button>
-        </p>
+      <div class="buttons is-right">
+          <button class="button is-danger has-text-white" routerLink="/">Cancel</button>
+          <!-- Button below will be uncommented once function is ready -->
+          <!-- <button class="button is-success has-text-white" (click)="changePw(oldPwInput.value, newPwInput.value, confirmNewPwInput.value)">Change Password</button> -->
+          <button class="button is-success has-text-white">Change Password</button>
       </div>
-  
-      <br>
-      
     </div>
 </div>
