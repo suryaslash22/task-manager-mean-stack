@@ -4,6 +4,7 @@ import { WebRequestService } from './web-request.service';
 import { shareReplay, tap } from 'rxjs/operators';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ErrorHandlingMiddlewareWithOption } from 'mongoose';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class AuthService {
     )
   }
 
-  logout(){
+  logout(){ 
     this.removeSession();
     this.router.navigate(['/login']);
   }

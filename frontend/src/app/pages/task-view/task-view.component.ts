@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Task } from 'src/app/models/task.model';
 import { List } from 'src/app/models/list.model';
 import { AuthService } from 'src/app/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-task-view',
@@ -65,6 +66,22 @@ ngOnInit() {
   logout(){
     this.authService.logout();
     console.log("Logged out");
+  }
+
+  logoutButton(){
+    Swal.fire({
+      text: 'Are you sure you want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      backdrop: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.logout();
+      }})   
   }
 
 }
