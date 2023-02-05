@@ -36,6 +36,16 @@ export class AuthService {
     )
   }
 
+  changePw(email: string, password: string){
+    let userId = this.getUserId();
+    return this.webService.changePw(email, password, userId).pipe(
+      shareReplay(),
+      tap((res: HttpResponse<any>) => {
+        console.log("Password changed successfully");
+      })
+    )
+  }
+
   logout(){ 
     this.removeSession();
     this.router.navigate(['/login']);

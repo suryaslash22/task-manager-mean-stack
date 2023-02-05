@@ -385,7 +385,7 @@ app.put('/users/:userId', authenticate, (req, res) => {
  * Purpose: view password
  */
 app.get('/users/:userId', (req, res) => {
-    // we authenticate before allowing change pw
+    // for testing change pw feature
 
     User.findOne({
         _id: req.params.userId

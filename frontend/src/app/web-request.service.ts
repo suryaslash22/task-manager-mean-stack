@@ -26,6 +26,10 @@ export class WebRequestService {
     return this.http.patch(`${this.ROOT_URL}/${uri}`, payload);
   }
 
+  put(uri: string, payload: Object) {
+    return this.http.put(`${this.ROOT_URL}/${uri}`, payload);
+  }
+
   delete(uri: string) {
     return this.http.delete(`${this.ROOT_URL}/${uri}`);
   }
@@ -48,12 +52,12 @@ export class WebRequestService {
     });
   }
 
-  // changePw(email: string, password: string) {
-  //   return this.http.put(`${this.ROOT_URL}/users`, {
-  //     email,
-  //     password
-  //   }, { 
-  //     observe: 'response' 
-  //   });
-  // }
+  changePw(email: string, password: string, userId: string){
+    return this.http.put(`${this.ROOT_URL}/users/${userId}`, {
+      email,
+      password
+    }, {
+      observe: 'response' 
+    });
+  }
   }

@@ -30,9 +30,7 @@
       <br>
       <div class="buttons is-right">
           <button class="button is-danger has-text-white" routerLink="/">Cancel</button>
-          <!-- Button below will be uncommented once function is ready -->
-          <button class="button is-success has-text-white" (click)="changePw(oldPwInput.value, newPwInput.value, confirmNewPwInput.value)">Change Password</button>
-          <!-- <button class="button is-success has-text-white">Change Password</button> -->
+          <button class="button is-success has-text-white" (click)="OnChangePwButtonClicked(oldPwInput.value, newPwInput.value, confirmNewPwInput.value)">Change Password</button>
       </div>
     </div>
 </div>

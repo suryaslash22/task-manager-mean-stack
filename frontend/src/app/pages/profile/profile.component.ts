@@ -14,7 +14,7 @@ export class ProfileComponent {
 
   ngOnInit(){}
 
-  changePw(oldPw: string, newPw: string, confirmNewPw: string){
+  OnChangePwButtonClicked(oldPw: string, newPw: string, confirmNewPw: string){
     // all fields must have an entry
     if (!oldPw || !newPw || !confirmNewPw){
       Swal.fire({
@@ -63,6 +63,24 @@ export class ProfileComponent {
         if (res.status === 200) {
           // perform pw change
           console.log("allow pw change");
+          this.authService.changePw(email, newPw).subscribe((res2: HttpResponse<any>) => {
+            // pw is changed but receiving an error here
+            // Unexpected token 'O', \"OK\" is not valid JSON
+
+            // if (res.status === 200) {
+              // pw changed
+              // console.log(res);
+            // }
+          })
+          Swal.fire({
+            title: 'Success',
+            text: 'Your password has been changed successfully!',
+            icon: 'success',
+            backdrop: false
+          }).then(() => {
+            this.router.navigate(['/']);
+          })
+          
         }
       })
     }

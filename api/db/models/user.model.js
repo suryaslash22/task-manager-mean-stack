@@ -87,18 +87,21 @@ UserSchema.methods.createSession = function () {
 }
 
 UserSchema.methods.changePw = function (newPassword){
-    let user = this;
+    const user = this;
+    this.password = newPassword;
+    user.save();
+    // console.log("pw change works without hashing");
 
     // Generate salt and hash password
-    let costFactor = 10;
+    // let costFactor = 10;
 
-    bcrypt.genSalt(costFactor, (err, salt) => {
-        bcrypt.hash(newPassword, salt, (err, hash) => {
-            this.password = hash;
-            this.save();
-            // console.log("got this far");
-        })
-    })
+    // bcrypt.genSalt(costFactor, (err, salt) => {
+    //     bcrypt.hash(newPassword, salt, (err, hash) => {
+    //         this.password = hash;
+    //         this.save();
+    //         // console.log("got this far");
+    //     })
+    // })
 }
 
 /* MODEL METHODS (static methods) */
@@ -123,19 +126,20 @@ UserSchema.statics.findByCredentials = function (email, password) {
     return User.findOne({ email }).then((user) => {
         if (!user) return Promise.reject();
 
+        // pw check without hashing
         if (password === user.password) return user;
 
-        return new Promise((resolve, reject) => {
-            bcrypt.compare(password, user.password, (err, res) => {
-                if (res) {
-                    resolve(user);
-                }
-                else {
-                    reject();
-                    console.log("here lies the issue!!!");
-                }
-            })
-        })
+        // return new Promise((resolve, reject) => {
+        //     bcrypt.compare(password, user.password, (err, res) => {
+        //         if (res) {
+        //             resolve(user);
+        //         }
+        //         else {
+        //             reject();
+        //             console.log("here lies the issue!!!");
+        //         }
+        //     })
+        // })
     })
 }
 
@@ -154,24 +158,24 @@ UserSchema.statics.hasRefreshTokenExpired = (expiresAt) => {
 /* MIDDLEWARE */
 // Before a user document is saved, this code runs
 
-UserSchema.pre('save', function (next) {
-    let user = this;
-    let costFactor = 10;
+// UserSchema.pre('save', function (next) {
+//     let user = this;
+//     let costFactor = 10;
 
-    if (user.isModified('password')) {
-        // if the password field has been edited/changed then run this code.
+//     if (user.isModified('password')) {
+//         // if the password field has been edited/changed then run this code.
 
-        // Generate salt and hash password
-        bcrypt.genSalt(costFactor, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, hash) => {
-                user.password = hash;
-                next();
-            })
-        })
-    } else {
-        next();
-    }
-});
+//         // Generate salt and hash password
+//         bcrypt.genSalt(costFactor, (err, salt) => {
+//             bcrypt.hash(user.password, salt, (err, hash) => {
+//                 user.password = hash;
+//                 next();
+//             })
+//         })
+//     } else {
+//         next();
+//     }
+// });
 
 /* HELPER METHODS */
 let saveSessionToDatabase = (user, refreshToken) => {
