@@ -86,6 +86,21 @@ UserSchema.methods.createSession = function () {
     })
 }
 
+UserSchema.methods.changePw = function (newPassword){
+    let user = this;
+
+    // Generate salt and hash password
+    let costFactor = 10;
+
+    bcrypt.genSalt(costFactor, (err, salt) => {
+        bcrypt.hash(newPassword, salt, (err, hash) => {
+            this.password = hash;
+            this.save();
+            // console.log("got this far");
+        })
+    })
+}
+
 /* MODEL METHODS (static methods) */
 
 UserSchema.statics.getJWTSecret = () => {
@@ -108,6 +123,8 @@ UserSchema.statics.findByCredentials = function (email, password) {
     return User.findOne({ email }).then((user) => {
         if (!user) return Promise.reject();
 
+        if (password === user.password) return user;
+
         return new Promise((resolve, reject) => {
             bcrypt.compare(password, user.password, (err, res) => {
                 if (res) {
@@ -115,6 +132,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
                 }
                 else {
                     reject();
+                    console.log("here lies the issue!!!");
                 }
             })
         })

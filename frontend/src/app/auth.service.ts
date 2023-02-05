@@ -18,7 +18,7 @@ export class AuthService {
       shareReplay(),
       tap((res: HttpResponse<any>) => {
         // the auth tokens will be in the header of this response
-        this.setSession(res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string);
+        this.setSession(email, res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string);
         console.log("Logged in");
       }
     )
@@ -29,7 +29,7 @@ export class AuthService {
       shareReplay(),
       tap((res: HttpResponse<any>) => {
         // the auth tokens will be in the header of this response
-        this.setSession(res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string);
+        this.setSession(email, res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string);
         console.log("Signed up");
       }
     )
@@ -53,17 +53,23 @@ export class AuthService {
     return localStorage.getItem('user-id') as string;
   }
 
+  getUserEmail(){
+    return localStorage.getItem('user-email');
+  }
+
   setAccessToken(accessToken: string){
     localStorage.setItem('x-access-token', accessToken);
   }
 
-  private setSession(userId : string, accessToken: string, refreshToken: string){
+  private setSession(userEmail : string, userId: string, accessToken: string, refreshToken: string){
+    localStorage.setItem('user-email', userEmail);
     localStorage.setItem('user-id', userId);
     localStorage.setItem('x-access-token', accessToken);
     localStorage.setItem('x-refresh-token', refreshToken);
   }
 
   private removeSession(){
+    localStorage.removeItem('user-email');
     localStorage.removeItem('user-id');
     localStorage.removeItem('x-access-token');
     localStorage.removeItem('x-refresh-token');

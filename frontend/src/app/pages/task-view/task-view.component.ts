@@ -16,6 +16,7 @@ export class TaskViewComponent implements OnInit {
 
 lists: any;
 tasks: any;
+userEmail: string;
 
  selectedListId: string;
 
@@ -38,6 +39,8 @@ ngOnInit() {
     this.taskService.getLists().subscribe((lists: any) => {
       this.lists = lists;
     })
+
+    this.userEmail = this.authService.getUserEmail();
   }
     
    onTaskClick(task: Task) {

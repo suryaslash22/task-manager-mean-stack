@@ -22,7 +22,7 @@ export class WebRequestService {
     return this.http.post(`${this.ROOT_URL}/${uri}`, payload);
   }
 
-   patch(uri: string, payload: Object) {
+  patch(uri: string, payload: Object) {
     return this.http.patch(`${this.ROOT_URL}/${uri}`, payload);
   }
 
@@ -38,12 +38,22 @@ export class WebRequestService {
       observe: 'response' 
     });
   }
+
   signup(email: string, password: string) {
     return this.http.post(`${this.ROOT_URL}/users`, {
       email,
       password
     }, { 
-      observe: 'response' 
+      observe: 'response'
     });
   }
+
+  // changePw(email: string, password: string) {
+  //   return this.http.put(`${this.ROOT_URL}/users`, {
+  //     email,
+  //     password
+  //   }, { 
+  //     observe: 'response' 
+  //   });
+  // }
   }

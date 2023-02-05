@@ -124,7 +124,7 @@ app.get('/lists', authenticate, (req, res) => {
 app.post('/lists', authenticate, (req, res) => {
 // We want to create a new list and return the new list document back to the user (which includes the id)
     // The list information (fields) will be passed in via the JSON request body	
-     let title = req.body.title;
+    let title = req.body.title;
 
     let newList = new List({
         title,
@@ -288,7 +288,7 @@ app.delete('/lists/:listId/tasks/:taskId', authenticate, (req, res) => {
 
     );
     
-    /* USER ROUTES */
+/* USER ROUTES */
 
 /**
  * POST /users
@@ -361,6 +361,42 @@ app.get('/users/me/access-token', verifySession, (req, res) => {
     }).catch((e) => {
         res.status(400).send(e);
     });
+})
+
+/**
+ * PUT /users/:userId
+ * Purpose: change password
+ */
+app.put('/users/:userId', authenticate, (req, res) => {
+    // we authenticate before allowing change pw
+
+    User.findOne({
+        _id: req.params.userId
+    }).then((user) => {
+        user.changePw(req.body.password);
+        // console.log("and back here as well");
+        res.sendStatus(200);
+    })
+})
+
+/**
+ * ONLY FOR TESTING PURPOSES
+ * GET /users/:userId
+ * Purpose: view password
+ */
+app.get('/users/:userId', (req, res) => {
+    // we authenticate before allowing change pw
+
+    User.findOne({
+        _id: req.params.userId
+    }).then((user) => {
+        body = {
+            "email": user.email,
+            "password": user.password
+        }
+        res.send(body);
+    })
+
 })
 
 /* HELPER METHODS */
