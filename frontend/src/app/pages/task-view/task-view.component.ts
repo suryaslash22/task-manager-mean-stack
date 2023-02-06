@@ -16,6 +16,7 @@ export class TaskViewComponent implements OnInit {
 
 lists: any;
 tasks: any;
+// task_pages: any;
 userEmail: string;
 
  selectedListId: string;
@@ -25,16 +26,18 @@ constructor(private taskService: TaskService, private route: ActivatedRoute, pri
 ngOnInit() {
     this.route.params.subscribe(
       (params: Params) => {
-        if (params['listId']){
+        if(params['listId']){
          this.selectedListId = params['listId'];
               this.taskService.getTasks(params['listId']).subscribe((tasks: any) => {
-         this.tasks = tasks;
-                    })
-                }
-                else{
-                  this.tasks = undefined;
-                }
-              }
+                this.tasks = tasks;
+                // this.task_pages = Math.ceil(tasks.length / 6);
+                })
+          }
+          else{
+            this.tasks = undefined;
+            // this.task_pages = 1;
+          }
+        }
       )
     this.taskService.getLists().subscribe((lists: any) => {
       this.lists = lists;

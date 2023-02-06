@@ -399,6 +399,19 @@ app.get('/users/:userId', (req, res) => {
 
 })
 
+/* ADMIN ROUTES */
+
+/**
+ * GET /users/
+ * Purpose: get all users
+ */
+app.get('/users', (req, res) => {
+    // for retrieving all users
+    User.find({}).then((users) => {
+        res.send(users);
+    })
+})
+
 /* HELPER METHODS */
 
 let deleteTasksFromList = (_listId) => {

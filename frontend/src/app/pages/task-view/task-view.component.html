@@ -72,6 +72,16 @@
         <button routerLink="./new-task" class="circle-add-button button is-primary">
           <img src="../../../assets/plus-icon.svg" class="has-text-white">
         </button>
+
+        <!-- <div *ngIf="task_pages > 1">
+          <nav class="pagination" role="navigation" aria-label="pagination" style="padding-bottom: 20px; position: fixed;">
+            <ul class="pagination-list">
+              <li *ngFor="let item of [].constructor(task_pages); let i = index">
+                <a class="pagination-link">{{ i+1 }}</a>
+              </li>
+            </ul>
+          </nav>
+        </div> -->
       </div>
 
       <div *ngIf="!tasks">
@@ -82,34 +92,34 @@
 
   </div>
   <div class="logout">
-  <div class="dropdown is-hoverable is-right">
-    <div class="dropdown-trigger">
-      <button class="button is-success" aria-haspopup="true" aria-controls="dropdown-menu">
-        <!-- <span>Profile</span> -->
-        <span class="icon is-big">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </button>
-    </div>
-    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-      <div class="dropdown-content" style="margin-left: 30px;">
-        <p class="dropdown-item" style="font-style: italic; background-color: lightgray;">
-          {{userEmail}}
-        </p>
-        <hr class="dropdown-divider">
-        <a href="/profile" class="dropdown-item">
-          Change Password
-        </a>
-        <hr class="dropdown-divider">
-        <a class="dropdown-item" (click)="logoutButton()">
-          Logout
-        </a>
-        <hr class="dropdown-divider">
-        <a class="dropdown-item">
-          About
-        </a>
+    <div class="dropdown is-hoverable is-right">
+      <div class="dropdown-trigger">
+        <button class="button is-success" aria-haspopup="true" aria-controls="dropdown-menu">
+          <!-- <span>Profile</span> -->
+          <span class="icon is-big">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+      <div class="dropdown-menu" id="dropdown-menu" role="menu">
+        <div class="dropdown-content" style="margin-left: 30px;">
+          <p class="dropdown-item" style="font-style: italic; background-color: lightgray;">
+            {{userEmail}}
+          </p>
+          <hr class="dropdown-divider">
+          <a href="/profile" class="dropdown-item">
+            Change Password
+          </a>
+          <hr class="dropdown-divider">
+          <a class="dropdown-item" (click)="logoutButton()">
+            Logout
+          </a>
+          <hr class="dropdown-divider">
+          <a class="dropdown-item">
+            About
+          </a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>

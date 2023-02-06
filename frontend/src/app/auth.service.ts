@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { WebRequestService } from './web-request.service';
 import { shareReplay, tap } from 'rxjs/operators';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { ErrorHandlingMiddlewareWithOption } from 'mongoose';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +47,12 @@ export class AuthService {
   logout(){ 
     this.removeSession();
     this.router.navigate(['/login']);
+  }
+
+  token: any;
+  isLoggedIn(): boolean {
+    if (this.getAccessToken()) return true;
+    else return false;
   }
 
   getAccessToken(){
@@ -98,4 +102,6 @@ export class AuthService {
       })
     )
   }
+
+  
 }

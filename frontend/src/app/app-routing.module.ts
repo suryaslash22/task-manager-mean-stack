@@ -8,18 +8,19 @@ import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 import { EditListComponent } from './pages/edit-list/edit-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AuthGuardService as AuthGuard } from './auth-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/lists', pathMatch: 'full' },
-  { path: 'new-list', component: NewListComponent },
-  { path: 'edit-list/:listId', component: EditListComponent },
+  { path: 'new-list', component: NewListComponent, canActivate: [AuthGuard] },
+  { path: 'edit-list/:listId', component: EditListComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupPageComponent },
-  { path: 'lists', component: TaskViewComponent },
-  { path: 'lists/:listId', component: TaskViewComponent },
-  { path: 'lists/:listId/new-task', component: NewTaskComponent },
-  { path: 'lists/:listId/edit-task/:taskId', component: EditTaskComponent },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'lists', component: TaskViewComponent, canActivate: [AuthGuard] },
+  { path: 'lists/:listId', component: TaskViewComponent, canActivate: [AuthGuard] },
+  { path: 'lists/:listId/new-task', component: NewTaskComponent, canActivate: [AuthGuard] },
+  { path: 'lists/:listId/edit-task/:taskId', component: EditTaskComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
