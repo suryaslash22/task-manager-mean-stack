@@ -10,6 +10,7 @@ import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 import { AdminComponent } from './pages/admin/admin.component';
+import { AboutComponent } from './pages/about/about.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/lists', pathMatch: 'full' },
@@ -22,7 +23,9 @@ const routes: Routes = [
   { path: 'lists/:listId', component: TaskViewComponent, canActivate: [AuthGuard] },
   { path: 'lists/:listId/new-task', component: NewTaskComponent, canActivate: [AuthGuard] },
   { path: 'lists/:listId/edit-task/:taskId', component: EditTaskComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'about', component: AboutComponent }
+
 ];
 
 @NgModule({
