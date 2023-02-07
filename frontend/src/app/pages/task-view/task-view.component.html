@@ -91,6 +91,7 @@
     </div>
 
   </div>
+
   <div class="logout">
     <div class="dropdown is-hoverable is-right">
       <div class="dropdown-trigger">
@@ -106,6 +107,12 @@
           <p class="dropdown-item" style="font-style: italic; background-color: lightgray;">
             {{userEmail}}
           </p>
+          <div *ngIf="isUserAdmin">
+            <hr class="dropdown-divider">
+            <a href="/admin" class="dropdown-item">
+              Admin Console
+            </a>
+          </div>
           <hr class="dropdown-divider">
           <a href="/profile" class="dropdown-item">
             Change Password

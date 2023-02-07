@@ -9,9 +9,11 @@ import { EditListComponent } from './pages/edit-list/edit-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
+import { AdminComponent } from './pages/admin/admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/lists', pathMatch: 'full' },
+  { path: 'admin', component: AdminComponent },
   { path: 'new-list', component: NewListComponent, canActivate: [AuthGuard] },
   { path: 'edit-list/:listId', component: EditListComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },

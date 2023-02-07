@@ -21,6 +21,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 8
     },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
     sessions: [{
         token: {
             type: String,
@@ -86,6 +90,12 @@ UserSchema.methods.createSession = function () {
     })
 }
 
+UserSchema.methods.changeEmail = function (newEmail){
+    const user = this;
+    this.email = newEmail;
+    user.save();
+}
+
 UserSchema.methods.changePw = function (newPassword){
     const user = this;
     this.password = newPassword;
@@ -102,6 +112,17 @@ UserSchema.methods.changePw = function (newPassword){
     //         // console.log("got this far");
     //     })
     // })
+}
+
+UserSchema.methods.makeAdmin = function (){
+    const user = this;
+    this.isAdmin = true;
+    user.save();
+}
+
+UserSchema.methods.checkIfAdmin = function(){
+    let user = this;
+    return this.isAdmin;
 }
 
 /* MODEL METHODS (static methods) */

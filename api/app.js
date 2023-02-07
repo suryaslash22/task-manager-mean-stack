@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
 // check whether the request has a valid JWT access token
 let authenticate = (req, res, next) => {
     let token = req.header('x-access-token');
-
+    
     // verify the JWT
     jwt.verify(token, User.getJWTSecret(), (err, decoded) => {
         if (err) {
@@ -43,6 +43,37 @@ let authenticate = (req, res, next) => {
             // jwt is valid
             req.user_id = decoded._id;
             next();
+        }
+    });
+}
+
+// check whether the request has a valid admin JWT access token
+let authenticateAdmin = (req, res, next) => {
+    let token = req.header('x-access-token');
+    
+    // verify the JWT
+    jwt.verify(token, User.getJWTSecret(), (err, decoded) => {
+        if (err) {
+            // there was an error
+            // jwt is invalid - * DO NOT AUTHENTICATE *
+            res.status(401).send(err);
+        } else {
+            // jwt is valid
+            req.user_id = decoded._id;
+            User.findById(req.user_id).then((user) => {
+                if (!user.checkIfAdmin()){
+                    // return Promise.reject({
+                        // 'error' : 'User does not have admin privileges!!'
+                    // });
+                    // there was an error
+                    // jwt is invalid - * DO NOT AUTHENTICATE *
+                    res.status(401).send("User does not have admin privileges!!");
+                }
+                else{
+                    next();
+                    // return Promise.resolve();
+                }
+            })
         }
     });
 }
@@ -214,8 +245,6 @@ app.post('/lists/:listId/tasks', authenticate, (req, res) => {
             res.sendStatus(404);
         }
     })
-
-                
 })
 
 /**
@@ -402,15 +431,271 @@ app.get('/users/:userId', (req, res) => {
 /* ADMIN ROUTES */
 
 /**
- * GET /users/
+ * GET /admin
+ * Purpose: check if user is admin
+ */
+app.get('/admin', authenticateAdmin, (req, res) => {
+    // authenticateAdmin does all the work
+    res.status(200).send("User has admin privileges.");
+})
+
+/**
+ * GET /users
  * Purpose: get all users
  */
-app.get('/users', (req, res) => {
+app.get('/users', authenticateAdmin, (req, res) => {
     // for retrieving all users
     User.find({}).then((users) => {
         res.send(users);
     })
 })
+
+/**
+ * PUT admin/users/:userId/change-password
+ * Purpose: admin change password
+ */
+app.put('/admin/users/:userId/change-password', authenticateAdmin, (req, res) => {
+    // we authenticate admin before allowing change pw
+
+    User.findOne({
+        _id: req.params.userId
+    }).then((user) => {
+        user.changePw(req.body.password);
+        // console.log("and back here as well");
+        res.sendStatus(200);
+    })
+})
+
+/**
+ * PUT admin/users/:userId/change-email
+ * Purpose: admin change email
+ */
+app.put('/admin/users/:userId/change-email', authenticateAdmin, (req, res) => {
+    // we authenticate admin before allowing change email
+    User.findOne({
+        _id: req.params.userId
+    }).then((user) => {
+        user.changeEmail(req.body.email);
+        // console.log("and back here as well");
+        res.sendStatus(200);
+    })
+})
+
+/**
+ * POST admin/users/:userId/make-admin
+ * Purpose: make user admin
+ */
+app.post('/admin/users/:userId/make-admin', authenticateAdmin, (req, res) => {
+    // we authenticate admin before allowing make admin
+    User.findOne({
+        _id: req.params.userId
+    }).then((user) => {
+        user.makeAdmin();
+        // console.log("and back here as well");
+        res.sendStatus(200);
+    })
+})
+
+/**
+ * DELETE /users/:userId
+ * Purpose: delete user
+ */
+app.delete('/admin/users/:userId/delete-user', authenticateAdmin, (req, res) => {
+    // we authenticate admin before allowing change email
+    User.findOneAndRemove({
+        _id: req.params.userId
+    }).then((deletedUser) => {
+        res.send(deletedUser);
+    })
+})
+
+/* ADMIN LIST ROUTES */
+
+/**
+ * GET /admin/:userId/lists
+ * Purpose: Get all lists
+ */
+app.get('/admin/:userId/lists', authenticateAdmin, (req, res) => {
+    // We want to return an array of all the lists in the database that belong to the user
+        
+        List.find({
+            _userId: req.params.userId
+        }).then((lists) => {
+            res.send(lists);
+           }).catch((e) => {
+            res.send(e);
+    });
+})
+    
+/**
+ * POST /admin/:userId/lists
+ * Purpose: create a new list
+ */
+
+app.post('/admin/:userId/lists', authenticateAdmin, (req, res) => {
+// We want to create a new list and return the new list document back to the user (which includes the id)
+    // The list information (fields) will be passed in via the JSON request body	
+    let title = req.body.title;
+
+    let newList = new List({
+        title,
+        _userId: req.params.userId
+            });
+
+    newList.save().then((listDoc) => {
+        // the full list document is returned (incl. id)
+        res.send(listDoc);
+    })
+    });
+
+/**
+ * PATCH /admin/:userId/lists/:id
+ * Purpose: Update a specified list
+ */
+app.patch('/admin/:userId/lists/:id', authenticateAdmin, (req, res) => {
+    // We want to update the specified list (list document with id in the URL) with the new values specified in the JSON body of the request
+    List.findOneAndUpdate({ _id: req.params.id, _userId: req.params.userId }, {
+        $set: req.body
+    }).then(() => {
+        res.send({ 'message': 'updated successfully'});
+    });
+
+    });
+
+/**
+ * DELETE /admin/:userId/lists/:id
+ * Purpose: Delete a list
+ */
+app.delete('/admin/:userId/lists/:id', authenticateAdmin, (req, res) => {
+    // We want to delete the specified list (document with id in the URL)
+    List.findOneAndRemove({
+        _id: req.params.id,
+        _userId: req.params.userId
+            }).then((removedListDoc) => {
+        res.send(removedListDoc);
+
+        // delete all tasks in deleted list
+        deleteTasksFromList(removedListDoc._id);
+
+            })
+});
+
+/**
+ * GET /admin/:userId/lists/:listId/tasks
+ * Purpose: Get all tasks in a specific list
+ */
+app.get('/admin/lists/:listId/tasks', authenticateAdmin, (req, res) => {
+    // We want to return all tasks that belong to a specific list (specified by listId)
+    Task.find({
+        _listId: req.params.listId
+    }).then((tasks) => {
+        res.send(tasks);
+    })
+});
+
+/**
+ * POST /admin/:userId/lists/:listId/tasks
+ * Purpose: Create a new task in a specific list
+ */
+app.post('/admin/:userId/lists/:listId/tasks', authenticateAdmin, (req, res) => {
+    // We want to create a new task in a list specified by listId
+
+    List.findOne({
+        _id: req.params.listId,
+        _userId: req.params.userId
+    }).then((list) => {
+        if(list) {
+            // list object with spec. conditions valid
+            // currently authenticated user can create new tasks
+            return true;
+        }
+
+        return false;
+    }).then((canCreateTask) => {
+        if(canCreateTask) {
+            let newTask = new Task({
+                title: req.body.title,
+                _listId: req.params.listId
+            });
+            newTask.save().then((newTaskDoc) => {
+                res.send(newTaskDoc);
+            })
+        }
+        else {
+            res.sendStatus(404);
+        }
+    })   
+})
+
+/**
+ * PATCH /admin/:userId/lists/:listId/tasks/:taskId
+ * Purpose: Update an existing task
+ */
+app.patch('/admin/:userId/lists/:listId/tasks/:taskId', authenticateAdmin, (req, res) => {
+    // We want to update an existing task (specified by taskId)
+
+    List.findOne({
+        _id: req.params.listId,
+        _userId: req.params.userId
+    }).then((list) => {
+        if(list) {
+            // list object with spec. conditions valid
+            // currently authenticated user can update tasks within list
+            return true;
+        }
+
+        return false;
+    }).then((canUpdateTasks) => {
+        if (canUpdateTasks){
+            Task.findOneAndUpdate({
+                _id: req.params.taskId,
+                _listId: req.params.listId
+            }, {
+                    $set: req.body
+                }
+            ).then(() => {
+                res.send({ message: 'Updated successfully.' })
+            })
+        } else {
+            res.sendStatus(404);
+        }
+    })
+
+                
+            });
+
+/**
+ * DELETE /admin/:userId/lists/:listId/tasks/:taskId
+ * Purpose: Delete a task
+ */
+app.delete('/admin/:userId/lists/:listId/tasks/:taskId', authenticateAdmin, (req, res) => {
+
+    List.findOne({
+        _id: req.params.listId,
+        _userId: req.params.userId
+    }).then((list) => {
+        if(list) {
+            // list object with spec. conditions valid
+            // currently authenticated user can update tasks within list
+            return true;
+        }
+
+        return false;
+    }).then((canUpdateTasks) => {
+        if (canUpdateTasks) {
+            Task.findOneAndRemove({
+                _id: req.params.taskId,
+                _listId: req.params.listId
+            }).then((removedTaskDoc) => {
+                res.send(removedTaskDoc);
+            })
+        
+    } else {
+        res.sendStatus(404);
+    }})
+        }
+
+    );
 
 /* HELPER METHODS */
 

@@ -1,0 +1,85 @@
+<div class="centered-content">
+    <div class="task-manager-container">
+        <div class="task-list-container has-background-light">
+            <div>
+              <div class="top-bar">
+                <h1 class="title has-text-primary">
+                  Admin Console
+                </h1>
+              </div>
+      
+              <!-- User Elements -->
+              <div class="task" *ngFor="let user of users">
+                <div class="task-text">
+                  <p>{{ user.email }}</p>
+                </div>
+                <div class="task-buttons">
+      
+                  <button class="button is-primary" (click)="onUserEmailChangeClick(user._id)">
+                    <div class="icon">
+                      <i class="fas fa-envelope"></i>
+                    </div>
+                  </button>
+
+                  <button class="button is-warning" (click)="onUserPwChangeClick(user._id)" style="margin-left: 10px;">
+                    <div class="icon">
+                      <i class="fas fa-key"></i>
+                    </div>
+                  </button>
+
+                  <button class="button is-info" (click)="onUserMakeAdminClick(user._id)" style="margin-left: 10px;">
+                    <div class="icon">
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </button>
+      
+                  <button class="button is-danger" (click)="onUserDeleteClick(user._id)" style="margin-left: 10px;">
+                    <div class="icon">
+                      <i class="fas fa-trash"></i>
+                    </div>
+                  </button>
+      
+                </div>
+              </div>
+      
+      
+          </div>
+    </div>
+    <div class="logout">
+        <div class="dropdown is-hoverable is-right">
+          <div class="dropdown-trigger">
+            <button class="button is-success" aria-haspopup="true" aria-controls="dropdown-menu">
+              <!-- <span>Profile</span> -->
+              <span class="icon is-big">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content" style="margin-left: 30px;">
+              <p class="dropdown-item" style="font-style: italic; background-color: lightgray;">
+                admin
+              </p>
+              <div>
+                <hr class="dropdown-divider">
+                <a href="/admin" class="dropdown-item">
+                  Admin Console
+                </a>
+              </div>
+              <hr class="dropdown-divider">
+              <a href="/profile" class="dropdown-item">
+                Change Password
+              </a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item" (click)="logoutButton()">
+                Logout
+              </a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item">
+                About
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
