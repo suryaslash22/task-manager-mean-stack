@@ -9,7 +9,7 @@
               </div>
       
               <!-- User Elements -->
-              <div class="task" *ngFor="let user of users">
+              <div class="task" *ngFor="let user of users | paginate: { itemsPerPage: items_per_page, currentPage: page_num}">
                 <div class="task-text">
                   <p>{{ user.email }}</p>
                 </div>
@@ -42,7 +42,10 @@
                 </div>
               </div>
       
-      
+              <!--Including the pagination control.-->
+              <div class="pagination-styles">
+                <pagination-controls [directionLinks]="false" previousLabel="" nextLabel="" (pageChange)="page_num = $event"></pagination-controls>
+              </div>
           </div>
     </div>
     <div class="logout">
@@ -82,4 +85,5 @@
           </div>
         </div>
       </div>
+  </div>
 </div>

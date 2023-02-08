@@ -12,6 +12,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 export class AdminComponent implements OnInit{
 
   users: any;
+  page_num: number = 1;
+  items_per_page: number = 6;
 
   constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute, private router: Router) {}
 
@@ -27,7 +29,7 @@ export class AdminComponent implements OnInit{
     this.router.navigate(['admin/users/', userId, 'change-email']);
   }
 
-  onUserPwChangeClick(id: string) {
+  onUserPwChangeClick(userId: string) {
     // perform pw change
     console.log("pw change button clicked");
   }
