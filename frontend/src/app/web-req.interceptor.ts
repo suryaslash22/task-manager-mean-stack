@@ -23,11 +23,19 @@ export class WebReqInterceptor implements HttpInterceptor {
     // call next() and handle response
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+
         console.log(error);
         const login_url = "http://localhost:3000/users/login";
         const users_url = "http://localhost:3000/users";
+        const admin_url = "http://localhost:3000/admin";
 
-        if (error.status === 401){
+        if (error.status === 401 && error.url === admin_url){
+          // user is not admin
+
+          return empty();
+        }
+        
+        else if (error.status === 401){
           // 401 so we are unauthorized
 
           // refresh access token

@@ -14,6 +14,9 @@ import { SignupPageComponent } from './pages/signup-page/signup-page.component';
 import { EditListComponent } from './pages/edit-list/edit-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { AboutComponent } from './pages/about/about.component';
+import { ChangeEmailComponent } from './pages/admin/change-email/change-email.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { ProfileComponent } from './pages/profile/profile.component';
     SignupPageComponent,
     EditListComponent,
     EditTaskComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdminComponent,
+    AboutComponent,
+    ChangeEmailComponent
   ],
   imports: [
     BrowserModule,

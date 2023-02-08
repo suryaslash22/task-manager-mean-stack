@@ -9,9 +9,14 @@ import { EditListComponent } from './pages/edit-list/edit-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
+import { AdminComponent } from './pages/admin/admin.component';
+import { AboutComponent } from './pages/about/about.component';
+import { ChangeEmailComponent } from './pages/admin/change-email/change-email.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/lists', pathMatch: 'full' },
+  { path: 'admin', component: AdminComponent },
+  { path: 'admin/users/:userId/change-email', component: ChangeEmailComponent },
   { path: 'new-list', component: NewListComponent, canActivate: [AuthGuard] },
   { path: 'edit-list/:listId', component: EditListComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
@@ -20,7 +25,9 @@ const routes: Routes = [
   { path: 'lists/:listId', component: TaskViewComponent, canActivate: [AuthGuard] },
   { path: 'lists/:listId/new-task', component: NewTaskComponent, canActivate: [AuthGuard] },
   { path: 'lists/:listId/edit-task/:taskId', component: EditTaskComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'about', component: AboutComponent }
+
 ];
 
 @NgModule({

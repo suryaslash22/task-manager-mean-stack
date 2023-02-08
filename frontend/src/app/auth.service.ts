@@ -11,12 +11,14 @@ export class AuthService {
 
   constructor(private webService: WebRequestService, private router: Router, private http: HttpClient) { }
 
+  // isUserAdmin : boolean;
+
   login( email: string, password: string) {
     return this.webService.login(email, password).pipe(
       shareReplay(),
       tap((res: HttpResponse<any>) => {
         // the auth tokens will be in the header of this response
-        this.setSession(email, res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string);
+        this.setSession(email, res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string, res.body.isAdmin);
         console.log("Logged in");
       }
     )
@@ -27,7 +29,7 @@ export class AuthService {
       shareReplay(),
       tap((res: HttpResponse<any>) => {
         // the auth tokens will be in the header of this response
-        this.setSession(email, res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string);
+        this.setSession(email, res.body._id, res.headers.get('x-access-token') as string, res.headers.get('x-refresh-token') as string, res.body.isAdmin);
         console.log("Signed up");
       }
     )
@@ -75,11 +77,12 @@ export class AuthService {
     localStorage.setItem('x-access-token', accessToken);
   }
 
-  private setSession(userEmail : string, userId: string, accessToken: string, refreshToken: string){
+  private setSession(userEmail : string, userId: string, accessToken: string, refreshToken: string, isAdmin: boolean){
     localStorage.setItem('user-email', userEmail);
     localStorage.setItem('user-id', userId);
     localStorage.setItem('x-access-token', accessToken);
     localStorage.setItem('x-refresh-token', refreshToken);
+    localStorage.setItem('has-admin-privileges', String(isAdmin));
   }
 
   private removeSession(){
@@ -87,6 +90,7 @@ export class AuthService {
     localStorage.removeItem('user-id');
     localStorage.removeItem('x-access-token');
     localStorage.removeItem('x-refresh-token');
+    localStorage.removeItem('has-admin-privileges');
   }
 
   getNewAccessToken() {
@@ -103,5 +107,6 @@ export class AuthService {
     )
   }
 
-  
+  checkIfAdmin(){ return localStorage.getItem('has-admin-privileges') === 'true'; }
+
 }
