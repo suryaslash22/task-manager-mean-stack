@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 const { List, Task , User } = require('./db/models');
 
 const jwt = require('jsonwebtoken');
+var cors = require('cors');
+app.use(cors())
 
 /* MIDDLEWARE  */
 
@@ -462,7 +464,7 @@ app.put('/admin/users/:userId/change-password', authenticateAdmin, (req, res) =>
     }).then((user) => {
         user.changePw(req.body.password);
         // console.log("and back here as well");
-        res.sendStatus(200);
+        res.status(200).send(user);
     })
 })
 
@@ -475,9 +477,9 @@ app.put('/admin/users/:userId/change-email', authenticateAdmin, (req, res) => {
     User.findOne({
         _id: req.params.userId
     }).then((user) => {
-        user.changeEmail(req.body.email);
+        user.changeEmail(req.body.newEmail);
         // console.log("and back here as well");
-        res.sendStatus(200);
+        res.status(200).send(user);
     })
 })
 
@@ -492,7 +494,7 @@ app.post('/admin/users/:userId/make-admin', authenticateAdmin, (req, res) => {
     }).then((user) => {
         user.makeAdmin();
         // console.log("and back here as well");
-        res.sendStatus(200);
+        res.status(200).send(user);
     })
 })
 

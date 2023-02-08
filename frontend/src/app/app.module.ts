@@ -16,6 +16,7 @@ import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AboutComponent } from './pages/about/about.component';
+import { ChangeEmailComponent } from './pages/admin/change-email/change-email.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AboutComponent } from './pages/about/about.component';
     EditTaskComponent,
     ProfileComponent,
     AdminComponent,
-    AboutComponent
+    AboutComponent,
+    ChangeEmailComponent
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth.service';
 import Swal from 'sweetalert2';
 import { UserService } from 'src/app/user.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -13,7 +13,7 @@ export class AdminComponent implements OnInit{
 
   users: any;
 
-  constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute) {}
+  constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.userService.getUsers().subscribe((users) => {
@@ -21,9 +21,10 @@ export class AdminComponent implements OnInit{
     })
   }
 
-  onUserEmailChangeClick(id: string) {
+  onUserEmailChangeClick(userId: string) {
     // perform email change
-    console.log("email change button clicked");
+    // console.log("email change button clicked");
+    this.router.navigate(['admin/users/', userId, 'change-email']);
   }
 
   onUserPwChangeClick(id: string) {
@@ -33,14 +34,21 @@ export class AdminComponent implements OnInit{
 
   onUserMakeAdminClick(id: string) {
     // perform make admin
-    console.log("make admin button clicked");
-    this.userService.makeUserAdmin(id).subscribe((res: any) => console.log(res));
+    // console.log("make admin button clicked");
+    this.userService.makeUserAdmin(id).subscribe((res: any) => {
+      console.log(res);
+      console.log(id + " has been granted admin privileges");
+    });
   }
 
   onUserDeleteClick(id: string) {
     // perform user delete
     console.log("user delete button clicked");
-    this.userService.deleteUser(id).subscribe((res: any) => console.log(res));
+    this.userService.deleteUser(id).subscribe((res: any) => {
+      console.log(res);
+      console.log(id + " has been deleted");
+      location.reload();
+    })
   }
 
   logout(){

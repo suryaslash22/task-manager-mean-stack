@@ -23,6 +23,7 @@ export class WebReqInterceptor implements HttpInterceptor {
     // call next() and handle response
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+
         console.log(error);
         const login_url = "http://localhost:3000/users/login";
         const users_url = "http://localhost:3000/users";
