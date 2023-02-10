@@ -1,15 +1,42 @@
 const express = require('express');
 const app = express();
-
 const { mongoose } = require('./db/mongoose');
-
 const bodyParser = require('body-parser');
-
 const { List, Task , User } = require('./db/models');
-
 const jwt = require('jsonwebtoken');
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 var cors = require('cors');
 app.use(cors())
+
+const options = {
+  swaggerDefinition: {
+    openapi: "3.0.1",
+    info: {
+      title: "TaskManager in swagger",
+      version: "1.0.0",
+    },
+      components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+           in: "header",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ["app.js"],
+};
+
+const swaggerSpecs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 /* MIDDLEWARE  */
 
@@ -132,6 +159,20 @@ let verifySession = (req, res, next) => {
 
 /* END MIDDLEWARE  */
 
+
+ /**
+ * @swagger
+ * /lists:
+ *    get:
+ *      tags:
+ *        - Lists
+ *      description: Get List
+ *      summary: Get List
+ *      responses:
+ *          lists:
+ *              description: This is the default response for it
+  */
+
 /* LIST ROUTES */ 
 /**
  * GET /lists
@@ -148,6 +189,42 @@ app.get('/lists', authenticate, (req, res) => {
         res.send(e);
 });
 })
+
+/**
+ * @swagger
+ * /lists:
+ *    post:
+ *      tags:
+ *        - Lists
+ *      description: Create New List
+ *      summary: Create New List
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                _userId:
+ *                  type: string
+ *                  description: enter your userId
+ *                title:
+ *                  type: string
+ *                  description: enter your List Title
+  *      responses:
+ *        200:
+ *          description: Successfully created ;ist
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *               
+ *                
+ */           
+/**
 
 /**
  * post /lists
@@ -184,6 +261,35 @@ app.patch('/lists/:id', authenticate, (req, res) => {
 
     });
 
+
+    /**
+ * @swagger
+ * /lists/:id:
+ *    delete:
+ *      tags:
+ *        - Delete
+ *      summary: Remove List API  
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          description: List id
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Successfully deleted data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string 
+ *                    example: Successfully deleted data! 
+ */
+
+
    /**
  * DELETE /lists/:id
  * Purpose: Delete a list
@@ -214,6 +320,50 @@ app.get('/lists/:listId/tasks', authenticate, (req, res) => {
         res.send(tasks);
     })
 });
+
+
+/**
+ * @swagger
+ * /lists/:listId/tasks:
+ *    post:
+ *      tags:
+ *        - Tasks
+ *      description: Create New Task
+ *      summary: Create New Task
+ *      requestHeader:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                _listId:
+ *                  type: string
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                _listId:
+ *                  type: string
+ *                  description: enter your listId
+ *                title:
+ *                  type: string
+ *                  description: enter your task Title
+  *      responses:
+ *        200:
+ *          description: Successfully created Task
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully created Task! 
+ */           
 
 /**
  * POST /lists/:listId/tasks
@@ -285,6 +435,40 @@ app.patch('/lists/:listId/tasks/:taskId', authenticate, (req, res) => {
 
                 
           });
+/**
+ * @swagger
+ * lists/:listId/tasks/:
+ *    delete:
+ *      tags:
+ *        - Delete
+ *      summary: Remove Task API  
+ *      parameters:
+ *        - name: Taskid
+ *          in: path
+ *          required: true
+ *          description: Task id
+ *          schema:
+ *            type: string
+  *        - name: Listid
+ *          in: path
+ *          required: true
+ *          description: list id
+ *          schema:
+ *            type: string
+ *      responses:
+ *        200:
+ *          description: Successfully deleted task
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully deleted task!     
+ */
+
+
 
 /**
  * DELETE /lists/:listId/tasks/:taskId
@@ -322,6 +506,41 @@ app.delete('/lists/:listId/tasks/:taskId', authenticate, (req, res) => {
 /* USER ROUTES */
 
 /**
+ * @swagger
+ * /users:
+ *    post:
+ *      tags:
+ *        - Users
+ *      description: Create users API
+ *      summary: Create users data
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                  type: string
+ *                  description: enter your username
+ *                password:
+ *                  type: string
+ *                  description: enter your password
+  *      responses:
+ *        200:
+ *          description: Successfully created User
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully created User! 
+ *                
+ */           
+
+/**
  * POST /users
  * Purpose: Sign up
  */
@@ -351,6 +570,41 @@ app.post('/users', (req, res) => {
         res.status(400).send(e);
     })
 })
+
+ /**
+ * @swagger
+ * /users/login/:
+ *    post:
+ *      tags:
+ *        - Users
+ *      description: Login and Get Access Token
+ *      summary: Login and Get Access Token
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                  type: string
+ *                  description: enter your username
+ *                password:
+ *                  type: string
+ *                  description: enter your password
+  *      responses:
+ *        200:
+ *          description: Successfully Logged in
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    example: Successfully Logged in!
+ *                
+ */           
 
 /**
  * POST /users/login
